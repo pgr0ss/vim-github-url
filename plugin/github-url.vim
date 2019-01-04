@@ -16,6 +16,11 @@ function! GitHubURL() range
   let revision = systemlist("git rev-parse HEAD")[0]
   let path = systemlist("git ls-files --full-name " . @%)[0]
   let url = repo . "/blob/" . revision . "/" . path . "#L" . a:firstline . "-L" . a:lastline
+
+  if has('clipboard')
+    let @+ = url
+  endif
+
   echomsg url
 endfunction
 command! -range GitHubURL <line1>,<line2>call GitHubURL()
