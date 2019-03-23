@@ -15,7 +15,16 @@ function! GitHubURL() range
   let repo = systemlist("git config --get remote." . remote . ".url | sed 's/\.git$//' | sed 's_^git@\\(.*\\):_https://\\1/_' | sed 's_^git://_https://_'")[0]
   let revision = systemlist("git rev-parse HEAD")[0]
   let path = systemlist("git ls-files --full-name " . @%)[0]
-  let url = repo . "/blob/" . revision . "/" . path . "#L" . a:firstline . "-L" . a:lastline
+  let line = "#L" . a:firstline 
+  if a:firstline != a:lastline
+    if repo=~#"gitlab\.com"
+      let line = line . "-" . a:lastline
+    else
+      let line = line . "-L" . a:lastline
+    endif
+  endif
+
+  let url = repo . "/blob/" . revision . "/" . path . line
 
   if has('clipboard')
     let @+ = url
