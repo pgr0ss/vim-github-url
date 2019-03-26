@@ -2,6 +2,8 @@ Vim plugin to show GitHub URLs in source files.
 
 The generated URLs reference the current commit and not the current branch, so it will not be affected by later commits (e.g. you send someone the URL for a branch and by the time they click the link it's pointing to the wrong line in the file).
 
+Plugin supports GitLab.com repositories.
+
 ## Usage
 
 In Vim, run:
