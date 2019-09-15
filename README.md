@@ -6,9 +6,9 @@ The generated URLs reference the current commit and not the current branch, so i
 
 In Vim, run:
 
-```
-:GitHubURL
-```
+- `:GitHubURLRepo` to view the repo on GitHub
+- `:GitHubURLBlob` to view the file under cursor on GitHub
+- `:GitHubURLBlame` to view the file under cursor in a git blame on GitHub
 
 And it will use `echomsg` to print the URL to the screen, such as:
 
