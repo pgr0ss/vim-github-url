@@ -75,9 +75,9 @@ function! GitHubURLBlame() range
   echomsg url
 endfunction
 
-command! GitHubRepoURL call GitHubURLRepo()
+command! GitHubURLRepo call GitHubURLRepo()
 
 command! -range GitHubURL <line1>,<line2>call GitHubURLBlob()
-command! -range GitHubBlobURL <line1>,<line2>call GitHubURLBlob()
+command! -range GitHubURLBlob <line1>,<line2>call GitHubURLBlob()
 
-command! -range GitHubBlameURL <line1>,<line2>call GitHubURLBlame()
+command! -range GitHubURLBlame <line1>,<line2>call GitHubURLBlame()
