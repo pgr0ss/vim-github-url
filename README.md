@@ -18,6 +18,8 @@ You can also visually select several lines and the URL will include the range.
 
 If you want to see previous URLs, you can use `:messages`.
 
+The URL will also be stored to the `clipboard` if it is available.
+
 ## Setup
 
 Using [vim-plug](https://github.com/junegunn/vim-plug):
