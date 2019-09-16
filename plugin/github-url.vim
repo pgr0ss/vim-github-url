@@ -3,7 +3,7 @@ if exists("g:loaded_github_url") || &cp
 endif
 let g:loaded_github_url = 1
 
-function! GitHubURL() range
+function! s:repoURL()
   let branch = systemlist("git name-rev --name-only HEAD")[0]
   let remote_lines = systemlist("git config branch." . branch . ".remote")
   if len(remote_lines) > 0
@@ -13,8 +13,19 @@ function! GitHubURL() range
     let remote = "origin"
   endif
   let repo = systemlist("git config --get remote." . remote . ".url | sed 's/\.git$//' | sed 's_^git@\\(.*\\):_https://\\1/_' | sed 's_^git://_https://_'")[0]
-  let revision = systemlist("git rev-parse HEAD")[0]
-  let path = systemlist("git ls-files --full-name " . @%)[0]
+
+  return repo
+endfunction
+
+function! s:revision()
+  return systemlist("git rev-parse HEAD")[0]
+endfunction
+
+function! s:path()
+  return systemlist("git ls-files --full-name " . @%)[0]
+endfunction
+
+function! s:lineAnchor() range
   let line = "#L" . a:firstline
   if a:firstline != a:lastline
     if repo=~#"gitlab\.com"
@@ -23,7 +34,24 @@ function! GitHubURL() range
       let line = line . "-L" . a:lastline
     endif
   endif
+  return line
+endfunction
 
+function! GitHubURLRepo()
+  let url = s:repoURL()
+
+  if has('clipboard')
+    let @+ = url
+  endif
+
+  echomsg url
+endfunction
+
+function! GitHubURLBlob() range
+  let repo = s:repoURL()
+  let revision = s:revision()
+  let path = s:path()
+  let line = s:lineAnchor()
   let url = repo . "/blob/" . revision . "/" . path . line
 
   if has('clipboard')
@@ -32,4 +60,24 @@ function! GitHubURL() range
 
   echomsg url
 endfunction
-command! -range GitHubURL <line1>,<line2>call GitHubURL()
+
+function! GitHubURLBlame() range
+  let repo = s:repoURL()
+  let revision = s:revision()
+  let path = s:path()
+  let line = s:lineAnchor()
+  let url = repo . "/blame/" . revision . "/" . path . line
+
+  if has('clipboard')
+    let @+ = url
+  endif
+
+  echomsg url
+endfunction
+
+command! GitHubURLRepo call GitHubURLRepo()
+
+command! -range GitHubURL <line1>,<line2>call GitHubURLBlob()
+command! -range GitHubURLBlob <line1>,<line2>call GitHubURLBlob()
+
+command! -range GitHubURLBlame <line1>,<line2>call GitHubURLBlame()
