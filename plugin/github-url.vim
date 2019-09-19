@@ -25,13 +25,13 @@ function! s:path()
   return systemlist("git ls-files --full-name " . @%)[0]
 endfunction
 
-function! s:lineAnchor() range
-  let line = "#L" . a:firstline
-  if a:firstline != a:lastline
-    if repo=~#"gitlab\.com"
-      let line = line . "-" . a:lastline
+function! s:lineAnchor(repo, first, last) range
+  let line = "#L" . a:first
+  if a:first != a:last
+    if a:repo=~#"gitlab\.com"
+      let line = line . "-" . a:last
     else
-      let line = line . "-L" . a:lastline
+      let line = line . "-L" . a:last
     endif
   endif
   return line
@@ -51,7 +51,7 @@ function! GitHubURLBlob() range
   let repo = s:repoURL()
   let revision = s:revision()
   let path = s:path()
-  let line = s:lineAnchor()
+  let line = s:lineAnchor(repo, a:firstline, a:lastline)
   let url = repo . "/blob/" . revision . "/" . path . line
 
   if has('clipboard')
@@ -65,7 +65,7 @@ function! GitHubURLBlame() range
   let repo = s:repoURL()
   let revision = s:revision()
   let path = s:path()
-  let line = s:lineAnchor()
+  let line = s:lineAnchor(repo, a:firstline, a:lastline)
   let url = repo . "/blame/" . revision . "/" . path . line
 
   if has('clipboard')
