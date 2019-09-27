@@ -25,7 +25,7 @@ function! s:path()
   return systemlist("git ls-files --full-name " . @%)[0]
 endfunction
 
-function! s:lineAnchor(repo, first, last) range
+function! s:lineAnchor(repo, first, last)
   let line = "#L" . a:first
   if a:first != a:last
     if a:repo=~#"gitlab\.com"
