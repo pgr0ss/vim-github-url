@@ -28,7 +28,7 @@ endfunction
 function! s:lineAnchor(repo, first, last)
   let line = "#L" . a:first
   if a:first != a:last
-    if a:repo=~#"gitlab\.com"
+    if a:repo=~#"gitlab"
       let line = line . "-" . a:last
     else
       let line = line . "-L" . a:last
