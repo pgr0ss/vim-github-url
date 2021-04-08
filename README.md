@@ -26,3 +26,9 @@ Using [vim-plug](https://github.com/junegunn/vim-plug):
 ```vim
 Plug 'pgr0ss/vim-github-url'
 ```
+
+Using Vim 8+ packages
+```bash
+$ mkdir -p ~/.vim/pack/git-plugins/start
+$ git clone https://github.com/pgr0ss/vim-github-url.git --depth=1 ~/.vim/pack/git-plugins/start/vim-github-url
+```
