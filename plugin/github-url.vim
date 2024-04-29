@@ -4,7 +4,7 @@ endif
 let g:loaded_github_url = 1
 
 function! s:repoURL()
-  let branch = systemlist("git name-rev --name-only HEAD")[0]
+  let branch = systemlist("git branch --show-current")[0]
   let remote_lines = systemlist("git config branch." . branch . ".remote")
   if len(remote_lines) > 0
     let remote = remote_lines[0]
