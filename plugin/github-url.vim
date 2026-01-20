@@ -3,13 +3,35 @@ if exists("g:loaded_github_url") || &cp
 endif
 let g:loaded_github_url = 1
 
+function! s:branch()
+  let jj_root = systemlist("jj root 2>/dev/null")
+  if v:shell_error == 0 && len(jj_root) > 0
+    let bookmark_lines = systemlist("jj bookmark list -r 'closest_bookmark(@)' 2>/dev/null | cut -d: -f1")
+    if v:shell_error == 0 && len(bookmark_lines) > 0 && bookmark_lines[0] != ""
+      return bookmark_lines[0]
+    endif
+  endif
+
+  let branch_lines = systemlist("git branch --show-current 2>/dev/null")
+  if v:shell_error == 0 && len(branch_lines) > 0
+    return branch_lines[0]
+  endif
+
+  return ""
+endfunction
+
 function! s:repoURL()
-  let branch = systemlist("git branch --show-current")[0]
-  let remote_lines = systemlist("git config branch." . branch . ".remote")
-  if len(remote_lines) > 0
-    let remote = remote_lines[0]
+  let branch = s:branch()
+
+  if branch != ""
+    let remote_lines = systemlist("git config branch." . branch . ".remote")
+    if len(remote_lines) > 0
+      let remote = remote_lines[0]
+    else
+      echo "Warning: Could not determine remote from '" . branch . "', assuming origin"
+      let remote = "origin"
+    endif
   else
-    echo "Warning: Could not determine remote from '" . branch . "', assuming origin"
     let remote = "origin"
   endif
   let repo = systemlist("git config --get remote." . remote . ".url | sed 's/\.git$//' | sed 's_^git@\\(.*\\):_https://\\1/_' | sed 's_^git://_https://_'")[0]
